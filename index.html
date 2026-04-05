@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 Live Audio Spectrum</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="panel">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Real-time Web Serial Visualizer</p>
+          <h1>ESP32 Live Audio Spectrum</h1>
+        </div>
+
+        <div class="actions">
+          <div class="status" aria-live="polite" aria-atomic="true">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Disconnected</span>
+          </div>
+
+          <label class="axis-toggle" for="logAxisToggle" title="Use logarithmic frequency spacing">
+            <input id="logAxisToggle" type="checkbox" />
+            <span>Log Frequency</span>
+          </label>
+
+          <button id="connectBtn" type="button">Connect</button>
+        </div>
+      </header>
+
+      <div class="visualizer-wrap">
+        <section class="chart-card chart-card-composite">
+          <div class="chart-header">
+            <div>
+              <h2>Spectrum + Waterfall Histogram</h2>
+            </div>
+          </div>
+
+          <div class="composite-layout">
+            <aside class="time-axis" aria-hidden="true">
+              <span class="time-label time-now">Now</span>
+              <span class="time-label time-title">Time</span>
+              <span class="time-label time-old">Older</span>
+            </aside>
+
+            <div class="plot-stack">
+              <canvas id="spectrumCanvas" aria-label="Live audio spectrum visualizer"></canvas>
+              <canvas id="waterfallCanvas" aria-label="Waterfall audio spectrum visualizer"></canvas>
+            </div>
+          </div>
+
+          <div class="freq-axis" id="freqAxis" aria-hidden="true"></div>
+        </section>
+
+        <div class="hint-row">
+          <span>Web Serial</span>
+          <span>921600 baud</span>
+          <span>0 to 5 kHz</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
