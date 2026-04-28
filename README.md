@@ -19,7 +19,8 @@ Real-time audio spectrum visualizer using an ESP32‑C3 and a Web Serial visuali
 
 ![Mozart spectrum example](assets/pics/Mozart.png)
 
-This image shows the live spectrum and waterfall view from the web app.
+![Mozart spectrum example](assets/pics/DOTB.png)
+
 
 ## Wiring
 
