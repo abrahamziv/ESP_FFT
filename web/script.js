@@ -1,7 +1,7 @@
 const BIN_COUNT = 127;
 const VISIBLE_BIN_COUNT = BIN_COUNT - 1;
 const BAUD_RATE = 921600;
-const AXIS_MAX_KHZ = 5;
+const AXIS_MAX_KHZ = 2.5;
 const AXIS_TICKS = 5;
 const LOG_AXIS_WARP = 150;
 
@@ -10,6 +10,7 @@ const spectrumContext = spectrumCanvas.getContext('2d');
 const waterfallCanvas = document.getElementById('waterfallCanvas');
 const waterfallContext = waterfallCanvas.getContext('2d');
 const connectButton = document.getElementById('connectBtn');
+const pauseButton = document.getElementById('pauseBtn');
 const logAxisToggle = document.getElementById('logAxisToggle');
 const freqAxis = document.getElementById('freqAxis');
 const statusText = document.getElementById('statusText');
@@ -32,6 +33,7 @@ let waterfallColumnMap = null;
 let waterfallWidth = 0;
 let waterfallHeight = 0;
 let useLogAxis = false;
+let isPaused = false;
 
 function setConnectionState(connected) {
   isConnected = connected;
@@ -39,6 +41,14 @@ function setConnectionState(connected) {
   statusWrap.classList.toggle('is-connected', connected);
   statusDot.setAttribute('aria-hidden', 'true');
   connectButton.textContent = connected ? 'Disconnect' : 'Connect';
+}
+
+function setPauseState(paused) {
+  isPaused = paused;
+  pauseButton.textContent = paused ? '▶' : '⏸';
+  pauseButton.setAttribute('aria-pressed', String(paused));
+  pauseButton.setAttribute('aria-label', paused ? 'Resume graphs' : 'Pause graphs');
+  pauseButton.classList.toggle('is-paused', paused);
 }
 
 function hslToRgb(hue, saturation, lightness) {
@@ -139,7 +149,9 @@ function renderFrequencyAxisTicks() {
     const left = axisMap(normalized) * 100;
     const tick = document.createElement('span');
     tick.className = 'freq-tick';
-    tick.textContent = `${i} kHz`;
+    const tickValue = (i * AXIS_MAX_KHZ) / AXIS_TICKS;
+    const tickText = (Math.abs(tickValue - Math.round(tickValue)) < 1e-6) ? `${Math.round(tickValue)}` : tickValue.toFixed(1);
+    tick.textContent = `${tickText} kHz`;
     tick.style.left = `${left}%`;
 
     if (i === 0) {
@@ -231,6 +243,10 @@ function normalizeValue(value, maxValue) {
 }
 
 function drawSpectrum() {
+  if (isPaused) {
+    return;
+  }
+
   const width = spectrumCanvas.clientWidth;
   const height = spectrumCanvas.clientHeight;
 
@@ -287,6 +303,10 @@ function drawSpectrum() {
 }
 
 function drawWaterfall() {
+  if (isPaused) {
+    return;
+  }
+
   if (!waterfallImageData || !waterfallPixels || !waterfallColumnMap) {
     return;
   }
@@ -302,7 +322,7 @@ function drawWaterfall() {
   const topRow = waterfallPixels.subarray(0, rowStride);
 
   for (let x = 0; x < waterfallWidth; x += 1) {
-    const binIndex = waterfallColumnMap[x] + 1;
+    const binIndex = waterfallColumnMap[x];
     const normalized = normalizeValue(displayBins[binIndex], maxValue);
     const paletteIndex = Math.max(0, Math.min(255, Math.round(normalized * 255))) * 4;
     const pixelOffset = x * 4;
@@ -449,13 +469,19 @@ function toggleAxisMode() {
   renderFrequencyAxisTicks();
 }
 
+function togglePause() {
+  setPauseState(!isPaused);
+}
+
 window.addEventListener('resize', syncCanvasSizes);
 connectButton.addEventListener('click', toggleConnection);
+pauseButton.addEventListener('click', togglePause);
 logAxisToggle.addEventListener('change', toggleAxisMode);
 
 syncCanvasSizes();
 clearBins();
 clearWaterfall();
 setConnectionState(false);
+setPauseState(false);
 logAxisToggle.checked = false;
 requestAnimationFrame(renderFrame);

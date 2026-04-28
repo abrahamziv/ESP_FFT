@@ -49,8 +49,8 @@ void AudioAnalyzer::computeFFT() {
 
 void AudioAnalyzer::sendToTeleplot() {
     double *vReal = (activeBuffer == 0) ? vReal1 : vReal0;
-    // 2. Loop through the primary half of the mirror (ignoring DC offset at 0)
-    for (int i = 1; i < N_samples/2; i++) {
+    // 2. Loop through the first 128 bins only to avoid serial buffer overload
+    for (int i = 1; i < 128; i++) {
         // Teleplot format: >VariableName:Value
         Serial.printf(">Bin_%d:%f\n", i, vReal[i]);
     }

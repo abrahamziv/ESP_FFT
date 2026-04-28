@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define N_samples 256 //Number of samples to collect for each FFT computation
+#define N_samples 512 //Number of samples to collect for each FFT computation
 
 class AudioAnalyzer {
     private:

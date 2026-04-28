@@ -149,6 +149,40 @@ h1 {
   opacity: 0.7;
 }
 
+#pauseBtn {
+  appearance: none;
+  width: 46px;
+  height: 46px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+  color: var(--text);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+#pauseBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(125, 240, 165, 0.4);
+  background: linear-gradient(180deg, rgba(125, 240, 165, 0.12), rgba(255, 255, 255, 0.04));
+}
+
+#pauseBtn:active {
+  transform: translateY(0);
+}
+
+#pauseBtn.is-paused {
+  color: var(--accent);
+  border-color: rgba(125, 240, 165, 0.42);
+  box-shadow: 0 0 0 6px rgba(125, 240, 165, 0.08);
+}
+
 .visualizer-wrap {
   padding: 20px 20px 22px;
   display: grid;
@@ -288,6 +322,11 @@ h1 {
   .actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  #pauseBtn {
+    width: 42px;
+    height: 42px;
   }
 
   #spectrumCanvas {
