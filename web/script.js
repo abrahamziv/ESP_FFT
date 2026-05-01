@@ -172,8 +172,18 @@ function resizeWaterfallBuffer() {
   waterfallPixels = waterfallImageData.data;
   waterfallColumnMap = new Uint16Array(width);
 
+  // Compute horizontal padding and plot width in device pixels to match spectrum drawing
+  const cssWidth = waterfallCanvas.clientWidth; // CSS pixels
+  const paddingXcss = Math.max(10, cssWidth * 0.012);
+  const paddingX = Math.round(paddingXcss * dpr); // convert to device pixels
+  const plotWidth = Math.max(1, width - paddingX * 2);
+
   for (let x = 0; x < width; x += 1) {
-    const normalizedAxisPosition = (x + 0.5) / width;
+    // Map column center into the same normalized 0..1 plot-space used by the spectrum
+    const pixelCenter = x + 0.5;
+    let normalizedAxisPosition = (pixelCenter - paddingX) / plotWidth;
+    // Clamp so axisUnmap receives 0..1
+    normalizedAxisPosition = Math.min(1, Math.max(0, normalizedAxisPosition));
     const linearBinPosition = axisUnmap(normalizedAxisPosition);
     const mappedBin = Math.floor(linearBinPosition * VISIBLE_BIN_COUNT);
     waterfallColumnMap[x] = Math.min(VISIBLE_BIN_COUNT - 1, mappedBin);
