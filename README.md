@@ -1,6 +1,7 @@
 # ESP_FFT
 
 Real-time audio spectrum visualizer using an ESP32‑C3 and a Web Serial visualizer.
+Built on PlatformIO, using Github Copilot and Google Gemini.
 
 ## Project Summary
 
@@ -17,10 +18,13 @@ Real-time audio spectrum visualizer using an ESP32‑C3 and a Web Serial visuali
 
 ## Examples and Pictures
 
+![The Breadboard](assets/pics/ESPFFT_rig.JPG)
+
+### Mozart:
 ![Mozart spectrum example](assets/pics/Mozart.png)
 
-![Mozart spectrum example](assets/pics/DOTB.png)
-
+### Dance of the bumblebee:
+![Dance of the bumblebee](assets/pics/DOTB.png)
 
 ## Wiring
 
@@ -38,28 +42,6 @@ Real-time audio spectrum visualizer using an ESP32‑C3 and a Web Serial visuali
 2. Serial / USB
    - Connect the ESP32 to your computer via USB and open the Web Serial UI in a Chromium‑based browser (HTTPS or `localhost`).
    - Baud rate: `921600` (set in the UI and in `main.cpp`).
-
-## Build & Run
-
-1. Build with PlatformIO (from project root):
-
-```powershell
-pio run
-```
-
-2. Upload to ESP32‑C3:
-
-```powershell
-pio run --target upload
-```
-
-3. Open `web/index.html` in a Chromium‑based browser (serve over HTTPS or open via `localhost`), press Connect, select ESP32 port, ensure baud `921600`.
-
-## Troubleshooting
-
-- If values look clipped or DC biased, recheck the input bias network and ADC pin wiring.
-- If the browser cannot access serial, ensure Web Serial API support (Chrome/Edge) and that the page is served over HTTPS or `localhost`.
-- If FFT bins appear shifted, check sampling timer and that `analogRead(0)` maps to the physical pin you wired.
 
 ## License / Credits
 
