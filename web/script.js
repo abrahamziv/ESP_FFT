@@ -1,7 +1,7 @@
-const BIN_COUNT = 127;
+const BIN_COUNT = 154;
 const VISIBLE_BIN_COUNT = BIN_COUNT - 1;
 const BAUD_RATE = 921600;
-const AXIS_MAX_KHZ = 2.5;
+const AXIS_MAX_KHZ = 3;
 const AXIS_TICKS = 5;
 const LOG_AXIS_WARP = 150;
 

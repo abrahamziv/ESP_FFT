@@ -49,8 +49,8 @@ void AudioAnalyzer::computeFFT() {
 
 void AudioAnalyzer::sendToTeleplot() {
     double *vReal = (activeBuffer == 0) ? vReal1 : vReal0;
-    // 2. Loop through the first 128 bins only to avoid serial buffer overload
-    for (int i = 1; i < 128; i++) {
+    // Send bins 1-154 to cover 0-3kHz range (with 10kHz sampling, each bin is ~19.53Hz)
+    for (int i = 1; i < 155; i++) {
         // Teleplot format: >VariableName:Value
         Serial.printf(">Bin_%d:%f\n", i, vReal[i]);
     }
